@@ -1,0 +1,406 @@
+﻿<!DOCTYPE HTML>
+<!-- saved from url=(0076)http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb -->
+<!DOCTYPE html PUBLIC "" ""><HTML><HEAD><META content="IE=11.0000" 
+http-equiv="X-UA-Compatible">
+     
+<META charset="utf-8">     <TITLE>Jupyter Notebook</TITLE>     <LINK href="/static/base/images/favicon.ico?v=97c6417ed01bdc0ae3ef32ae4894fd03" 
+rel="shortcut icon" type="image/x-icon">     
+<META http-equiv="X-UA-Compatible" content="IE=edge">     <LINK href="DLND%20Your%20first%20neural%20network_files/jquery-ui.min.css" 
+rel="stylesheet" type="text/css">     <LINK href="DLND%20Your%20first%20neural%20network_files/jquery.typeahead.min.css" 
+rel="stylesheet" type="text/css">     
+<META name="viewport" content="width=device-width, initial-scale=1.0">         
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/MathJax.js" type="text/javascript" charset="utf-8"></SCRIPT>
+ 
+<SCRIPT type="text/javascript">
+// MathJax disabled, set as null to distingish from *missing* MathJax,
+// where it will be undefined, and should prompt a dialog later.
+window.mathjax_url = "/static/components/MathJax/MathJax.js";
+</SCRIPT>
+ <LINK href="DLND%20Your%20first%20neural%20network_files/bootstrap-tour.min.css" 
+rel="stylesheet" type="text/css"> <LINK href="DLND%20Your%20first%20neural%20network_files/codemirror.css" 
+rel="stylesheet">     <LINK href="DLND%20Your%20first%20neural%20network_files/style.min.css" 
+rel="stylesheet" type="text/css">     <LINK href="DLND%20Your%20first%20neural%20network_files/override.css" 
+rel="stylesheet" type="text/css"> <LINK id="kernel-css" href="" rel="stylesheet" 
+type="text/css">     <LINK href="/custom/custom.css" rel="stylesheet" type="text/css"> 
+    
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/promise.min.js" type="text/javascript" charset="utf-8"></SCRIPT>
+     
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/index.js" type="text/javascript"></SCRIPT>
+     
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/index(1).js" type="text/javascript"></SCRIPT>
+     
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/index(2).js" type="text/javascript"></SCRIPT>
+     
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/require.js" type="text/javascript" charset="utf-8"></SCRIPT>
+     
+<SCRIPT>
+      require.config({
+          
+          urlArgs: "v=20170420220533",
+          
+          baseUrl: '/static/',
+          paths: {
+            'auth/js/main': 'auth/js/main.min',
+            custom : '/custom',
+            nbextensions : '/nbextensions',
+            kernelspecs : '/kernelspecs',
+            underscore : 'components/underscore/underscore-min',
+            backbone : 'components/backbone/backbone-min',
+            jquery: 'components/jquery/jquery.min',
+            bootstrap: 'components/bootstrap/js/bootstrap.min',
+            bootstraptour: 'components/bootstrap-tour/build/js/bootstrap-tour.min',
+            'jquery-ui': 'components/jquery-ui/ui/minified/jquery-ui.min',
+            moment: 'components/moment/moment',
+            codemirror: 'components/codemirror',
+            termjs: 'components/xterm.js/dist/xterm',
+            typeahead: 'components/jquery-typeahead/dist/jquery.typeahead.min',
+          },
+          map: { // for backward compatibility
+              "*": {
+                  "jqueryui": "jquery-ui",
+              }
+          },
+          shim: {
+            typeahead: {
+              deps: ["jquery"],
+              exports: "typeahead"
+            },
+            underscore: {
+              exports: '_'
+            },
+            backbone: {
+              deps: ["underscore", "jquery"],
+              exports: "Backbone"
+            },
+            bootstrap: {
+              deps: ["jquery"],
+              exports: "bootstrap"
+            },
+            bootstraptour: {
+              deps: ["bootstrap"],
+              exports: "Tour"
+            },
+            "jquery-ui": {
+              deps: ["jquery"],
+              exports: "$"
+            }
+          },
+          waitSeconds: 30,
+      });
+
+      require.config({
+          map: {
+              '*':{
+                'contents': 'services/contents',
+              }
+          }
+      });
+
+      // error-catching custom.js shim.
+      define("custom", function (require, exports, module) {
+          try {
+              var custom = require('custom/custom');
+              console.debug('loaded custom.js');
+              return custom;
+          } catch (e) {
+              console.error("error loading custom.js", e);
+              return {};
+          }
+      })
+    </SCRIPT>
+         
+<META name="GENERATOR" content="MSHTML 11.00.9600.18639"></HEAD> 
+<BODY class="notebook_app " dir="ltr" data-notebook-path="DLND%20Your%20first%20neural%20network.ipynb" 
+data-notebook-name="DLND%20Your%20first%20neural%20network.ipynb" data-ws-url="" 
+data-base-url="/" data-jupyter-api-token="d2892aed32f1acc29ef3742f64e611d7e17d941e0d55ee5f"><NOSCRIPT> 
+   &lt;div id='noscript'&gt;      Jupyter Notebook requires 
+JavaScript.&lt;br&gt;      Please enable it to proceed.  &lt;/div&gt; 
+</NOSCRIPT> 
+<DIV id="header">
+<DIV class="container" id="header-container">
+<DIV class="nav navbar-brand pull-left" id="ipython_notebook"><A title="dashboard" 
+href="http://localhost:8889/tree"><IMG alt="Jupyter Notebook" src="DLND%20Your%20first%20neural%20network_files/logo.png"></A></DIV><SPAN 
+id="login_widget"><BUTTON class="btn btn-sm navbar-btn" 
+id="logout">Logout</BUTTON>           </SPAN>       <SPAN class="pull-left save_widget" 
+id="save_widget"><SPAN class="filename" id="notebook_name"></SPAN>     <SPAN 
+class="checkpoint_status"></SPAN>     <SPAN class="autosave_status"></SPAN> 
+</SPAN> <SPAN id="kernel_logo_widget"><IMG class="current_kernel_logo" src="">   
+</SPAN>   </DIV>
+<DIV class="header-bar"></DIV>
+<DIV class="container" id="menubar-container">
+<DIV id="menubar">
+<DIV class="navbar navbar-default" id="menus" role="navigation">
+<DIV class="container-fluid"><BUTTON class="btn btn-default navbar-btn navbar-toggle" 
+type="button" data-toggle="collapse" data-target=".navbar-collapse"><I class="fa fa-bars"></I> 
+              <SPAN class="navbar-text">Menu</SPAN>             </BUTTON>        
+     
+<P class="navbar-text indicator_area" id="kernel_indicator"><SPAN class="kernel_indicator_name">Kernel</SPAN> 
+              <I id="kernel_indicator_icon"></I>             </P><I title="This notebook is read-only" 
+class="navbar-text" id="readonly-indicator"><SPAN class="fa-stack"><I class="fa fa-save fa-stack-1x"></I> 
+                    <I class="fa fa-ban fa-stack-2x text-danger"></I>            
+     </SPAN>             </I>             <I class="navbar-text" id="modal_indicator"></I> 
+            <SPAN id="notification_area"></SPAN>             
+<DIV class="navbar-collapse collapse">
+<UL class="nav navbar-nav">
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">File</A>
+  <UL class="dropdown-menu" id="file_menu">
+    <LI class="dropdown-submenu" id="new_notebook"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">New 
+    Notebook</A>
+    <UL class="dropdown-menu" id="menu-new-notebook-submenu"></UL></LI>
+    <LI title="Opens a new window with the Dashboard view" id="open_notebook"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Open...</A></LI><!-- <hr/> --> 
+                            
+    <LI class="divider"></LI>
+    <LI title="Open a copy of this notebook's contents and start a new kernel" 
+    id="copy_notebook"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Make 
+    a Copy...</A></LI>
+    <LI id="rename_notebook"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Rename...</A></LI>
+    <LI id="save_checkpoint"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Save 
+    and Checkpoint</A></LI><!-- <hr/> -->                         
+    <LI class="divider"></LI>
+    <LI class="dropdown-submenu" id="restore_checkpoint"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Revert 
+    to Checkpoint</A>
+    <UL class="dropdown-menu">
+      <LI><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"></A></LI>
+      <LI><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"></A></LI>
+      <LI><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"></A></LI>
+      <LI><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"></A></LI>
+      <LI><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"></A></LI></UL></LI>
+    <LI class="divider"></LI>
+    <LI id="print_preview"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Print 
+    Preview</A></LI>
+    <LI class="dropdown-submenu"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Download 
+    as</A>
+    <UL class="dropdown-menu" id="download_menu">
+      <LI id="download_ipynb"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Notebook 
+      (.ipynb)</A></LI>
+      <LI id="download_script"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Script</A></LI>
+      <LI id="download_html"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">HTML 
+      (.html)</A></LI>
+      <LI id="download_markdown"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Markdown 
+      (.md)</A></LI>
+      <LI id="download_rst"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">reST 
+      (.rst)</A></LI>
+      <LI id="download_latex"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">LaTeX 
+      (.tex)</A></LI>
+      <LI id="download_pdf"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">PDF 
+      via LaTeX (.pdf)</A></LI></UL></LI>
+    <LI class="dropdown-submenu hidden"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Deploy 
+    as</A>
+    <UL class="dropdown-menu" id="deploy_menu"></UL></LI>
+    <LI class="divider"></LI>
+    <LI title="Trust the output of this notebook" id="trust_notebook"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Trust 
+    Notebook</A></LI>
+    <LI class="divider"></LI>
+    <LI title="Shutdown this notebook's kernel, and close this window" id="kill_and_exit"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Close 
+    and Halt</A></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">Edit</A>
+  <UL class="dropdown-menu" id="edit_menu">
+    <LI id="cut_cell"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Cut 
+    Cells</A></LI>
+    <LI id="copy_cell"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Copy 
+    Cells</A></LI>
+    <LI class="disabled" id="paste_cell_above"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Paste 
+    Cells Above</A></LI>
+    <LI class="disabled" id="paste_cell_below"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Paste 
+    Cells Below</A></LI>
+    <LI class="disabled" id="paste_cell_replace"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Paste 
+    Cells &amp; Replace</A></LI>
+    <LI id="delete_cell"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Delete 
+    Cells</A></LI>
+    <LI class="disabled" id="undelete_cell"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Undo 
+    Delete Cells</A></LI>
+    <LI class="divider"></LI>
+    <LI id="split_cell"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Split 
+    Cell</A></LI>
+    <LI id="merge_cell_above"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Merge 
+    Cell Above</A></LI>
+    <LI id="merge_cell_below"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Merge 
+    Cell Below</A></LI>
+    <LI class="divider"></LI>
+    <LI id="move_cell_up"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Move 
+    Cell Up</A></LI>
+    <LI id="move_cell_down"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Move 
+    Cell Down</A></LI>
+    <LI class="divider"></LI>
+    <LI id="edit_nb_metadata"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Edit 
+    Notebook Metadata</A></LI>
+    <LI class="divider"></LI>
+    <LI id="find_and_replace"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"> 
+    Find and Replace </A></LI>
+    <LI class="divider"></LI>
+    <LI id="cut_cell_attachments"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Cut 
+    Cell Attachments</A></LI>
+    <LI id="copy_cell_attachments"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Copy 
+    Cell Attachments</A></LI>
+    <LI class="disabled" id="paste_cell_attachments"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Paste 
+    Cell Attachments</A></LI>
+    <LI class="divider"></LI>
+    <LI class="disabled" id="insert_image"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#"> 
+    Insert Image </A></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">View</A>
+  <UL class="dropdown-menu" id="view_menu">
+    <LI title="Show/Hide the logo and notebook title (above menu bar)" id="toggle_header"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle 
+    Header</A></LI>
+    <LI title="Show/Hide the action icons (below menu bar)" 
+    id="toggle_toolbar"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle 
+    Toolbar</A></LI>
+    <LI title="Show/Hide line numbers in cells" id="toggle_line_numbers"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle 
+    Line Numbers</A></LI>
+    <LI class="dropdown-submenu" id="menu-cell-toolbar"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Cell 
+    Toolbar</A>
+    <UL class="dropdown-menu" id="menu-cell-toolbar-submenu"></UL></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">Insert</A>
+  <UL class="dropdown-menu" id="insert_menu">
+    <LI title="Insert an empty Code cell above the currently active cell" id="insert_cell_above"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Insert 
+    Cell Above</A></LI>
+    <LI title="Insert an empty Code cell below the currently active cell" id="insert_cell_below"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Insert 
+    Cell Below</A></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">Cell</A>
+  <UL class="dropdown-menu" id="cell_menu">
+    <LI title="Run this cell, and move cursor to the next one" id="run_cell"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    Cells</A></LI>
+    <LI title="Run this cell, select below" id="run_cell_select_below"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    Cells and Select Below</A></LI>
+    <LI title="Run this cell, insert below" id="run_cell_insert_below"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    Cells and Insert Below</A></LI>
+    <LI title="Run all cells in the notebook" id="run_all_cells"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    All</A></LI>
+    <LI title="Run all cells above (but not including) this cell" id="run_all_cells_above"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    All Above</A></LI>
+    <LI title="Run this cell and all cells below it" id="run_all_cells_below"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Run 
+    All Below</A></LI>
+    <LI class="divider"></LI>
+    <LI title="All cells in the notebook have a cell type. By default, new cells are created as 'Code' cells" 
+    class="dropdown-submenu" id="change_cell_type"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Cell 
+    Type</A>
+    <UL class="dropdown-menu">
+      <LI title="Contents will be sent to the kernel for execution, and output will display in the footer of cell" 
+      id="to_code"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Code</A></LI>
+      <LI title="Contents will be rendered as HTML and serve as explanatory text" 
+      id="to_markdown"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Markdown</A></LI>
+      <LI title="Contents will pass through nbconvert unmodified" id="to_raw"><A 
+      href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Raw 
+      NBConvert</A></LI></UL></LI>
+    <LI class="divider"></LI>
+    <LI class="dropdown-submenu" id="current_outputs"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Current 
+    Outputs</A>
+    <UL class="dropdown-menu">
+      <LI title="Hide/Show the output of the current cell" id="toggle_current_output"><A 
+      href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle</A></LI>
+      <LI title="Scroll the output of the current cell" id="toggle_current_output_scroll"><A 
+      href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle 
+      Scrolling</A></LI>
+      <LI title="Clear the output of the current cell" 
+      id="clear_current_output"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Clear</A></LI></UL></LI>
+    <LI class="dropdown-submenu" id="all_outputs"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">All 
+    Output</A>
+    <UL class="dropdown-menu">
+      <LI title="Hide/Show the output of all cells" id="toggle_all_output"><A 
+      href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle</A></LI>
+      <LI title="Scroll the output of all cells" 
+      id="toggle_all_output_scroll"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Toggle 
+      Scrolling</A></LI>
+      <LI title="Clear the output of all cells" id="clear_all_output"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Clear</A></LI></UL></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">Kernel</A>
+  <UL class="dropdown-menu" id="kernel_menu">
+    <LI title="Send KeyboardInterrupt (CTRL-C) to the Kernel" id="int_kernel"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Interrupt</A></LI>
+    <LI title="Restart the Kernel" id="restart_kernel"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Restart</A></LI>
+    <LI title="Restart the Kernel and clear all output" id="restart_clear_output"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Restart 
+    &amp; Clear Output</A></LI>
+    <LI title="Restart the Kernel and re-run the notebook" 
+    id="restart_run_all"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Restart 
+    &amp; Run All</A></LI>
+    <LI title="Reconnect to the Kernel" id="reconnect_kernel"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Reconnect</A></LI>
+    <LI title="Shutdown the Kernel" id="shutdown_kernel"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Shutdown</A></LI>
+    <LI class="divider"></LI>
+    <LI class="dropdown-submenu" id="menu-change-kernel"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Change 
+    kernel</A>
+    <UL class="dropdown-menu" id="menu-change-kernel-submenu"></UL></LI></UL></LI>
+  <LI class="dropdown"><A class="dropdown-toggle" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#" 
+  data-toggle="dropdown">Help</A>
+  <UL class="dropdown-menu" id="help_menu">
+    <LI title="A quick tour of the notebook user interface" 
+    id="notebook_tour"><A href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">User 
+    Interface Tour</A></LI>
+    <LI title="Opens a dialog which shows all keyboard shortcuts" id="keyboard_shortcuts"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Keyboard 
+    Shortcuts</A></LI>
+    <LI title="Opens a dialog allowing you to edit Keyboard shortcuts" id="edit_keyboard_shortcuts"><A 
+    href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">Edit 
+    Keyboard Shortcuts</A></LI>
+    <LI class="divider"></LI>
+    <LI><A title="Opens in a new window" href="http://nbviewer.ipython.org/github/ipython/ipython/blob/3.x/examples/Notebook/Index.ipynb" 
+    target="_blank" rel="noreferrer"><I class="fa fa-external-link menu-icon pull-right"></I> 
+                                                                   Notebook Help 
+                                    </A></LI>
+    <LI><A title="Opens in a new window" href="https://help.github.com/articles/markdown-basics/" 
+    target="_blank" rel="noreferrer"><I class="fa fa-external-link menu-icon pull-right"></I> 
+                                                                   Markdown      
+                               </A></LI>
+    <LI class="divider"></LI>
+    <LI title="About Jupyter Notebook"><A id="notebook_about" href="http://localhost:8889/notebooks/DLND%20Your%20first%20neural%20network.ipynb#">About</A></LI></UL></LI></UL></DIV></DIV></DIV></DIV>
+<DIV class="navbar" id="maintoolbar">
+<DIV class="toolbar-inner navbar-inner navbar-nobg">
+<DIV class="container" id="maintoolbar-container"></DIV></DIV></DIV></DIV>
+<DIV class="lower-header-bar"></DIV></DIV>
+<DIV id="site">
+<DIV id="ipython-main-app">
+<DIV id="notebook_panel">
+<DIV id="notebook"></DIV>
+<DIV class="ipython_tooltip" id="tooltip" 
+style="display: none;"></DIV></DIV></DIV></DIV>
+<DIV id="pager">
+<DIV id="pager-contents">
+<DIV class="container" id="pager-container"></DIV></DIV>
+<DIV id="pager-button-area"></DIV></DIV>
+<SCRIPT type="text/javascript">
+    sys_info = {"notebook_version": "5.0.0", "notebook_path": "C:\\Miniconda2\\envs\\dlnd\\lib\\site-packages\\notebook", "commit_source": "", "commit_hash": "", "sys_version": "3.6.1 |Continuum Analytics, Inc.| (default, Mar 22 2017, 20:11:04) [MSC v.1900 64 bit (AMD64)]", "sys_executable": "C:\\Miniconda2\\envs\\dlnd\\python.exe", "sys_platform": "win32", "platform": "Windows-8.1-6.3.9600-SP0", "os_name": "nt", "default_encoding": "utf-8"};
+</SCRIPT>
+ 
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/encoding.js" charset="utf-8"></SCRIPT>
+ 
+<SCRIPT src="DLND%20Your%20first%20neural%20network_files/main.min.js" type="text/javascript" charset="utf-8"></SCRIPT>
+ 
+<SCRIPT type="text/javascript">
+  function _remove_token_from_url() {
+    if (window.location.search.length <= 1) {
+      return;
+    }
+    var search_parameters = window.location.search.slice(1).split('&');
+    for (var i = 0; i < search_parameters.length; i++) {
+      if (search_parameters[i].split('=')[0] === 'token') {
+        // remote token from search parameters
+        search_parameters.splice(i, 1);
+        var new_search = '';
+        if (search_parameters.length) {
+          new_search = '?' + search_parameters.join('&');
+        }
+        var new_url = window.location.origin + 
+                      window.location.pathname + 
+                      new_search + 
+                      window.location.hash;
+        window.history.replaceState({}, "", new_url);
+        return;
+      }
+    }
+  }
+  _remove_token_from_url();
+</SCRIPT>
+ </BODY></HTML>
