@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2016 Rafal Biegacz
+# Copyright (c) 2017 Rafal Biegacz
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,7 +44,6 @@ weights = [hidden_layer_weights, out_weights]
 biases = [tf.Variable(tf.zeros(3)), tf.Variable(tf.zeros(2))]
 # Input
 features = tf.Variable([[1.0, 2.0, 3.0, 4.0], [-1.0, -2.0, -3.0, -4.0], [11.0, 12.0, 13.0, 14.0]])
-
 
 # Model of the Neural Network - one hidden layer with RELU as activation function
 hidden_layer = tf.add(tf.matmul(features, weights[0]), biases[0])
