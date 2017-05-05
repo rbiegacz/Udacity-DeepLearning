@@ -34,8 +34,8 @@ def load_data():
     """
         this function loads MNIST data (downloads it if necessary)
     """
-    trainX, trainY, test_x, testY = mnist.load_data(one_hot=True)
-    return trainX, trainY, test_x, testY
+    train_x, train_y, test_x, testY = mnist.load_data(one_hot=True)
+    return train_x, train_y, test_x, testY
 
 def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate=0.1):
     """
@@ -55,19 +55,19 @@ def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate=0.1):
     model = tflearn.DNN(net)
     return model
 
-def train_model(model, trainX, trainY, batch_size=50, n_epoch=20):
+def train_model(model, train_x, train_y, batch_size=50, n_epoch=20):
     """
         this function trains the model
     """
-    model.fit(trainX, trainY, validation_set=0.1,\
+    model.fit(train_x, train_y, validation_set=0.1,\
               show_metric=True, batch_size=batch_size, n_epoch=n_epoch)
     return model
 
-def test_model(model, text_x, text_y):
+def test_model(mod, text_x, text_y):
     """
         this function tests the model
     """
-    predictions = np.array(model.predict(text_x)).argmax(axis=1)
+    predictions = np.array(mod.predict(text_x)).argmax(axis=1)
     actual = text_y.argmax(axis=1)
     test_accuracy = np.mean(predictions == actual, axis=0)
     print("Test accuracy: ", test_accuracy)
@@ -80,18 +80,18 @@ if __name__ == "__main__":
     nunits_hidden2s = [28, 56, 128, 256, 512]
     results = {}
 
-    trainX, trainY, test_x, testY = load_data()
+    train_x, train_y, test_x, testY = load_data()
     for n_epoch in n_epochs:
-        for nunits_hidden1 in nunits_hidden1s:
-            for nunits_hidden2 in nunits_hidden2s:
+        for nhidden1 in nunits_hidden1s:
+            for nhidden2 in nunits_hidden2s:
+                print("Hidden#1: {0} Hidden#2: {1} Epoch: {2}".format(nhidden1, nhidden2, n_epoch))
                 tf.reset_default_graph()
-                model = build_model(nunits_hidden1=nunits_hidden1, nunits_hidden2=nunits_hidden2)
+                model = build_model(nunits_hidden1=nhidden1, nunits_hidden2=nhidden2)
                 old_stdout = os.sys.stdout
                 os.sys.stdout = open(os.devnull, 'w')
-                train_model(model, trainX, trainY, batch_size=batch_size, n_epoch=n_epoch)
+                train_model(model, train_x, train_y, batch_size=batch_size, n_epoch=n_epoch)
                 os.sys.stdout = old_stdout
-                print("Hidden#1: {0} Hidden#2: {1} Epoch: {2}".format(nunits_hidden1, nunits_hidden2, n_epoch))
-                idx = str(nunits_hidden1) + ":" + str(nunits_hidden2)
+                idx = str(nhidden1) + ":" + str(nhidden2)
                 results[idx] = test_model(model, test_x, testY)
 
     print(results)
