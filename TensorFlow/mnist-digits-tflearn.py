@@ -52,16 +52,14 @@ def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate_value=0.1):
     net = tflearn.fully_connected(net, 10, activation='softmax')
     net = tflearn.regression(net, optimizer='sgd',\
                             learning_rate=learning_rate_value, loss='categorical_crossentropy')
-    model = tflearn.DNN(net)
-    return model
+    return tflearn.DNN(net)
 
-def train_model(model, train_x, train_y, batch_size=50, number_of_epochs=20):
+def train_model(modl, train_x_data, train_y_data, batch_size_number=50, number_of_epochs=20):
     """
         this function trains the model
     """
-    model.fit(train_x, train_y, validation_set=0.1,\
-              show_metric=True, batch_size=batch_size, n_epoch=number_of_epochs)
-    return model
+    return modl.fit(train_x_data, train_y_data, validation_set=0.1,\
+                    show_metric=True, batch_size=batch_size_number, n_epoch=number_of_epochs)
 
 def test_model(mod, text_x, text_y):
     """
@@ -88,13 +86,17 @@ if __name__ == "__main__":
                 for nhidden2 in nunits_hidden2s:
                     if nhidden2 > nhidden1:
                         continue
-                    print("Hidden#1: {0} Hidden#2: {1} Epoch: {2}".format(nhidden1, nhidden2, n_epoch))
+                    print("Hidden#1:{0} Hidden#2:{1} Epoch:{2} L.Rate:{3}"\
+                          .format(nhidden1, nhidden2, n_epoch, l_rate))
                     tf.reset_default_graph()
-                    model = build_model(nunits_hidden1=nhidden1, nunits_hidden2=nhidden2, learning_rate_value=l_rate)
+                    model = build_model(nunits_hidden1=nhidden1, nunits_hidden2=nhidden2,\
+                                        learning_rate_value=l_rate)
                     old_stdout = os.sys.stdout
                     os.sys.stdout = open(os.devnull, 'w')
-                    train_model(model, train_x, train_y, batch_size=batch_size, number_of_epochs=n_epoch)
+                    train_model(model, train_x, train_y,\
+                                batch_size_number=batch_size, number_of_epochs=n_epoch)
                     os.sys.stdout = old_stdout
                     idx = str(nhidden1) + ":" + str(nhidden2)
                     results[idx] = test_model(model, test_x, testY)
     print(results)
+    print("The best accuracy: {}".format(max(results, key=results.get)))
