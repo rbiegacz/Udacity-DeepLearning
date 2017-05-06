@@ -74,7 +74,7 @@ def test_model(mod, text_x, text_y):
 if __name__ == "__main__":
     batch_size = 50
     n_epochs = [50, 100]
-    l_rates = [1, 0.1, 0.01]
+    l_rates = [0.1, 0.05, 0.01]
     nunits_hidden1s = [28, 56, 128, 256, 512]
     nunits_hidden2s = [28, 56, 128, 256, 512]
     results = {}
