@@ -34,10 +34,10 @@ def load_data():
     """
         this function loads MNIST data (downloads it if necessary)
     """
-    train_x, train_y, test_x, testY = mnist.load_data(one_hot=True)
-    return train_x, train_y, test_x, testY
+    train_x_data, train_y_data, test_x_data, test_y_data = mnist.load_data(one_hot=True)
+    return train_x_data, train_y_data, test_x_data, test_y_data
 
-def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate=0.1):
+def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate_value=0.1):
     """
         This function builds model for digits recognition
     """
@@ -51,16 +51,16 @@ def build_model(nunits_hidden1=128, nunits_hidden2=28, learning_rate=0.1):
     # Output Layer #1
     net = tflearn.fully_connected(net, 10, activation='softmax')
     net = tflearn.regression(net, optimizer='sgd',\
-                            learning_rate=learning_rate, loss='categorical_crossentropy')
+                            learning_rate=learning_rate_value, loss='categorical_crossentropy')
     model = tflearn.DNN(net)
     return model
 
-def train_model(model, train_x, train_y, batch_size=50, n_epoch=20):
+def train_model(model, train_x, train_y, batch_size=50, number_of_epochs=20):
     """
         this function trains the model
     """
     model.fit(train_x, train_y, validation_set=0.1,\
-              show_metric=True, batch_size=batch_size, n_epoch=n_epoch)
+              show_metric=True, batch_size=batch_size, n_epoch=number_of_epochs)
     return model
 
 def test_model(mod, text_x, text_y):
@@ -75,23 +75,26 @@ def test_model(mod, text_x, text_y):
 
 if __name__ == "__main__":
     batch_size = 50
-    n_epochs = [10, 20, 50, 100]
+    n_epochs = [50, 100]
+    l_rates = [1, 0.1, 0.01]
     nunits_hidden1s = [28, 56, 128, 256, 512]
     nunits_hidden2s = [28, 56, 128, 256, 512]
     results = {}
 
     train_x, train_y, test_x, testY = load_data()
-    for n_epoch in n_epochs:
-        for nhidden1 in nunits_hidden1s:
-            for nhidden2 in nunits_hidden2s:
-                print("Hidden#1: {0} Hidden#2: {1} Epoch: {2}".format(nhidden1, nhidden2, n_epoch))
-                tf.reset_default_graph()
-                model = build_model(nunits_hidden1=nhidden1, nunits_hidden2=nhidden2)
-                old_stdout = os.sys.stdout
-                os.sys.stdout = open(os.devnull, 'w')
-                train_model(model, train_x, train_y, batch_size=batch_size, n_epoch=n_epoch)
-                os.sys.stdout = old_stdout
-                idx = str(nhidden1) + ":" + str(nhidden2)
-                results[idx] = test_model(model, test_x, testY)
-
+    for l_rate in l_rates:
+        for n_epoch in n_epochs:
+            for nhidden1 in nunits_hidden1s:
+                for nhidden2 in nunits_hidden2s:
+                    if nhidden2 > nhidden1:
+                        continue
+                    print("Hidden#1: {0} Hidden#2: {1} Epoch: {2}".format(nhidden1, nhidden2, n_epoch))
+                    tf.reset_default_graph()
+                    model = build_model(nunits_hidden1=nhidden1, nunits_hidden2=nhidden2, learning_rate_value=l_rate)
+                    old_stdout = os.sys.stdout
+                    os.sys.stdout = open(os.devnull, 'w')
+                    train_model(model, train_x, train_y, batch_size=batch_size, number_of_epochs=n_epoch)
+                    os.sys.stdout = old_stdout
+                    idx = str(nhidden1) + ":" + str(nhidden2)
+                    results[idx] = test_model(model, test_x, testY)
     print(results)
