@@ -47,3 +47,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 *.gz
+Project2/cifar-10-batches-py/batches.meta
+Project2/cifar-10-batches-py/data_batch_1
+*.pyc
+Project2/cifar-10-batches-py/data_batch_2
+Project2/cifar-10-batches-py/test_batch
+Project2/cifar-10-batches-py/data_batch_3
+Project2/cifar-10-batches-py/data_batch_4
+Project2/cifar-10-batches-py/data_batch_5
+Project2/cifar-10-batches-py/readme.html
