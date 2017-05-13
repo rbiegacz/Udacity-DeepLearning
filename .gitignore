@@ -56,3 +56,8 @@ Project2/cifar-10-batches-py/data_batch_3
 Project2/cifar-10-batches-py/data_batch_4
 Project2/cifar-10-batches-py/data_batch_5
 Project2/cifar-10-batches-py/readme.html
+Project2/preprocess_batch_1.p
+Project2/preprocess_batch_2.p
+Project2/preprocess_batch_4.p
+Project2/preprocess_test.p
+*.p
