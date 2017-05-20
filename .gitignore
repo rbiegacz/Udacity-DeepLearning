@@ -61,3 +61,5 @@ Project2/preprocess_batch_2.p
 Project2/preprocess_batch_4.p
 Project2/preprocess_test.p
 *.p
+Project2/.ipynb_checkpoints/
+Project2/__pycache__/
