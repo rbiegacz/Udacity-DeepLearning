@@ -10,49 +10,79 @@ def _load_label_names():
     """
     return ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
+"""
+aquatic mammals    beaver, dolphin, otter, seal, whale
+fish    aquarium fish, flatfish, ray, shark, trout
+flowers    orchids, poppies, roses, sunflowers, tulips
+food containers    bottles, bowls, cans, cups, plates
+fruit and vegetables    apples, mushrooms, oranges, pears, sweet peppers
+household electrical devices    clock, computer keyboard, lamp, telephone, television
+household furniture    bed, chair, couch, table, wardrobe
+insects    bee, beetle, butterfly, caterpillar, cockroach
+large carnivores    bear, leopard, lion, tiger, wolf
+large man-made outdoor things    bridge, castle, house, road, skyscraper
+large natural outdoor scenes    cloud, forest, mountain, plain, sea
+large omnivores and herbivores    camel, cattle, chimpanzee, elephant, kangaroo
+medium-sized mammals    fox, porcupine, possum, raccoon, skunk
+non-insect invertebrates    crab, lobster, snail, spider, worm
+people    baby, boy, girl, man, woman
+reptiles    crocodile, dinosaur, lizard, snake, turtle
+small mammals    hamster, mouse, rabbit, shrew, squirrel
+trees    maple, oak, palm, pine, willow
+vehicles 1    bicycle, bus, motorcycle, pickup truck, train
+vehicles 2    lawn-mower, rocket, streetcar, tank, tractor
+"""
 
-def load_cfar10_batch(cifar10_dataset_folder_path, batch_id):
+
+
+def load_cfar100_batch(cifar100_dataset_folder_path):
     """
     Load a batch of the dataset
     """
-    with open(cifar10_dataset_folder_path + '/data_batch_' + str(batch_id), mode='rb') as file:
+    with open(cifar100_dataset_folder_path + '/train', mode='rb') as file:
         batch = pickle.load(file, encoding='latin1')
+    with open(cifar100_dataset_folder_path + '/meta', mode='rb') as file:
+        meta = pickle.load(file, encoding='latin1')
 
     features = batch['data'].reshape((len(batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)
-    labels = batch['labels']
+    fine_labels_id = batch['fine_labels']
+    coarse_labels_id = batch['coarse_labels']
+    fine_labels = meta['fine_label_names']
+    coarse_labels = meta['coarse_label_names']
 
-    return features, labels
+    return features, fine_labels, coarse_labels, fine_labels_id, coarse_labels_id
 
 
-def display_stats(cifar10_dataset_folder_path, batch_id, sample_id):
+def display_stats(cifar100_dataset_folder_path,  sample_id):
     """
     Display Stats of the the dataset
     """
-    batch_ids = list(range(1, 6))
-
-    if batch_id not in batch_ids:
-        print('Batch Id out of Range. Possible Batch Ids: {}'.format(batch_ids))
-        return None
-
-    features, labels = load_cfar10_batch(cifar10_dataset_folder_path, batch_id)
+    features, fine_labels, coarse_labels, fine_labels_id, coarse_labels_id  = \
+        load_cfar100_batch(cifar100_dataset_folder_path)
 
     if not (0 <= sample_id < len(features)):
-        print('{} samples in batch {}.  {} is out of range.'.format(len(features), batch_id, sample_id))
+        print('{} samples.  {} is out of range.'.format(len(features), sample_id))
         return None
 
-    print('\nStats of batch {}:'.format(batch_id))
-    print('Samples: {}'.format(len(features)))
-    print('Label Counts: {}'.format(dict(zip(*np.unique(labels, return_counts=True)))))
-    print('First 20 Labels: {}'.format(labels[:20]))
+    #print('Samples: {}'.format(len(features)))
+    #print('Fine Label Counts: {}'.format(dict(zip(*np.unique(fine_labels, return_counts=True)))))
+    #print('Coarse Label Counts: {}'.format(dict(zip(*np.unique(coarse_labels, return_counts=True)))))
+    #print('First 20 fine labels: {}'.format(fine_labels[:20]))
+    #print('First 20 coarse labels: {}'.format(coarse_labels[:20]))
+
 
     sample_image = features[sample_id]
-    sample_label = labels[sample_id]
-    label_names = _load_label_names()
+    sample_fine_label = fine_labels_id[sample_id]
+    sample_coarse_label = coarse_labels_id[sample_id]
+    sample_fine_label_name = fine_labels[sample_fine_label]
+    sample_coarse_label_name = coarse_labels[sample_coarse_label]
+
 
     print('\nExample of Image {}:'.format(sample_id))
     print('Image - Min Value: {} Max Value: {}'.format(sample_image.min(), sample_image.max()))
     print('Image - Shape: {}'.format(sample_image.shape))
-    print('Label - Label Id: {} Name: {}'.format(sample_label, label_names[sample_label]))
+    print('Coarse Label - Label Id: {} Name: {}'.format(sample_fine_label,sample_coarse_label_name))
+    print('Fine Label - Label Id: {} Name: {}'.format(sample_coarse_label,sample_fine_label_name))
     plt.axis('off')
     plt.imshow(sample_image)
 
@@ -67,16 +97,16 @@ def _preprocess_and_save(normalize, one_hot_encode, features, labels, filename):
     pickle.dump((features, labels), open(filename, 'wb'))
 
 
-def preprocess_and_save_data(cifar10_dataset_folder_path, normalize, one_hot_encode):
+def preprocess_and_save_data(cifar100_dataset_folder_path, normalize, one_hot_encode):
     """
     Preprocess Training and Validation Data
     """
-    n_batches = 5
+    n_batches = 1
     valid_features = []
     valid_labels = []
 
     for batch_i in range(1, n_batches + 1):
-        features, labels = load_cfar10_batch(cifar10_dataset_folder_path, batch_i)
+        features, labels = load_cfar100_batch(cifar100_dataset_folder_path, batch_i)
         validation_count = int(len(features) * 0.1)
 
         # Prprocess and save a batch of training data
@@ -99,7 +129,7 @@ def preprocess_and_save_data(cifar10_dataset_folder_path, normalize, one_hot_enc
         np.array(valid_labels),
         'preprocess_validation.p')
 
-    with open(cifar10_dataset_folder_path + '/test_batch', mode='rb') as file:
+    with open(cifar100_dataset_folder_path + '/test_batch', mode='rb') as file:
         batch = pickle.load(file, encoding='latin1')
 
     # load the test data
