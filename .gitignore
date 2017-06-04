@@ -63,6 +63,10 @@ Project2/preprocess_test.p
 *.p
 Project2/.ipynb_checkpoints/
 Project2/__pycache__/
-Project2 - CIFAR100/cifar-100-python/
+Project3/.ipynb_checkpoints/
+Project4/.ipynb_checkpoints/
+Project5/.ipynb_checkpoints/
+Project6/.ipynb_checkpoints/
 Project2 - CIFAR100/.ipynb_checkpoints/
+Project2 - CIFAR100/cifar-100-python/
 Project2 - CIFAR100/__pycache__/
